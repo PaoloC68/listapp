@@ -57,7 +57,7 @@ class GluuOidc(BaseOAuth2):
                 'common_name': response.get(b'cn', ''),
                 'date_of_birth': response.get(b'teaDateOfBirth', ''),
                 'role': response.get(b'teaRole', ''),
-                'manager': response.get(b'manager', ''),
+                'manager': response.get(b'teaAppManager', ''),
                 'fullname': response.get('name', ''),}
                 # 'first_name': response.get('given_name', ''),
                 # 'last_name': response.get('family_name', '')}

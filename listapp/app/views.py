@@ -2,6 +2,8 @@
 from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 import requests
 
@@ -26,6 +28,11 @@ grade_naming_inv = dict(zip(grade_naming.values(), grade_naming.keys()))
 class IndexView(TemplateView):
     template_name = 'index.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return redirect(reverse('protected'))
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
+
 class ProtectedView(LoginRequiredMixin, TemplateView):
     template_name = 'protected.html'
 
@@ -43,10 +50,10 @@ class ProtectedView(LoginRequiredMixin, TemplateView):
             api_res = res.json()
             for r in api_res['resources']:
                 if r[grade_naming_inv[user.grade]]:
-                    if r['url'].lower() in sites and organization in r['district']:
-                        auth = True
-                    else:
-                        other_res.append(dict(name=r['name'], url=r['url'] ))
+                    if (r['teacher'] and user.role.lower() == 'teacher') or (r['student'] and user.role.lower() == 'student'):
+                        other_res.append(dict(name=r['name'], url=r['url']))
+                elif user.is_superuser:
+                    other_res.append(dict(name=r['name'], url=r['url']))
 
 
             ctx['app_auth'] = auth

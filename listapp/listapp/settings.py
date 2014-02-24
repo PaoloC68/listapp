@@ -104,7 +104,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 AUTHENTICATION_BACKENDS = (
     # 'social.backends.google.GoogleOAuth2',
-    'testappa.backends.GluuOidc',
+    'listapp.backends.GluuOidc',
     'django.contrib.auth.backends.ModelBackend', # this is default
 )
 
@@ -119,10 +119,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'testappa.urls'
+ROOT_URLCONF = 'listapp.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'testappa.wsgi.application'
+WSGI_APPLICATION = 'listapp.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
@@ -145,8 +145,10 @@ INSTALLED_APPS = (
 )
 
 
-SOCIAL_AUTH_GLUU_OIDC_KEY = b'@!DA85.5F98.95A1.CA3B!0001!8975.52D0!0008!7B0C.61A7'
+
+SOCIAL_AUTH_GLUU_OIDC_KEY = b'@!DA85.5F98.95A1.CA3B!0001!5FD3.3646!0008!FE1F.FA3A'
 SOCIAL_AUTH_GLUU_OIDC_SECRET = b'fd440f15-1711-4fa2-94ed-d4e03e0d4592'
+
 #SOCIAL_AUTH_GLUU_OIDC_AUTH_EXTRA_ARGUMENTS = {'prompt': 'consent'}
 
 AUTH_USER_MODEL = 'app.TeaUser'
