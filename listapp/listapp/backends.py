@@ -4,21 +4,20 @@ from __future__ import unicode_literals
 from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthMissingParameter, AuthCanceled, AuthFailed
-
+from social.exceptions import AuthMissingParameter, AuthCanceled
 
 class GluuOidc(BaseOAuth2):
     """Gluu authentication backend"""
     name = 'gluu-oidc'
     REDIRECT_STATE = False
-    AUTHORIZATION_URL = 'https://idp.logintex.me/oxauth/authorize.seam'
+    AUTHORIZATION_URL = 'https://idp.logintex.me/oxauth/seam/resource/restv1/oxauth/authorize'
     ACCESS_TOKEN_URL = 'https://idp.logintex.me/oxauth/seam/resource/restv1/oxauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://idp.logintex.me/oxauth/seam/resource/restv1/oxauth/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = ['openid',
                      'profile',
-                     'name',
+                     'email',
                      'teainfo']
     STATE_PARAMETER = False
     EXTRA_DATA = [
@@ -31,16 +30,6 @@ class GluuOidc(BaseOAuth2):
             return response['username']
         else:
             return details['email']
-
-    def process_error(self, data):
-        if data.get('error'):
-            if data['error'] == 'denied' or data['error'] == 'access_denied':
-                raise AuthCanceled(self, data.get('error_description', ''))
-            raise AuthFailed(self, data.get('error_description') or
-                                   data['error'])
-        elif 'denied' in data:
-            raise AuthCanceled(self, data['denied'])
-
 
     def get_user_details(self, response):
         email = response.get('email', '')
