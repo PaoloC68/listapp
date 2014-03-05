@@ -42,7 +42,7 @@ class ProtectedView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         organization = user.organization
         api_res = None
-        res = requests.get('http://idp.logintex.me:8088/api/districts/{0}/'.format(organization), headers=headers)
+        res = requests.get('http://admin.logintex.me/api/districts/{0}/'.format(organization), headers=headers)
         auth = False
         other_res = []
         sites = map(lambda x: x['domain'], Site.objects.values('domain'))
